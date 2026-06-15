@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 4000;
 
 // ─── Middleware ────────────────────────────────────────────────────────────────
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:3000',
+  (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, ''),
   'http://localhost:3000',
   'http://localhost:3001',
 ];
@@ -40,7 +40,8 @@ app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (e.g. Postman, server-to-server)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.some((o) => origin.startsWith(o))) {
+    const cleanOrigin = origin.replace(/\/$/, '');
+    if (allowedOrigins.some((o) => cleanOrigin.startsWith(o) || o.startsWith(cleanOrigin))) {
       return callback(null, true);
     }
     callback(new Error(`CORS: origin ${origin} not allowed`));
