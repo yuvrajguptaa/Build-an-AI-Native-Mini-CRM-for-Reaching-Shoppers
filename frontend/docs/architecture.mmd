@@ -1,0 +1,51 @@
+graph TB
+    subgraph Client["🖥️ Marketer Browser"]
+        UI[React + TanStack Router UI<br/>Dashboard / Segments / Campaigns / Analytics]
+        Bot[Floating AI Assistant]
+    end
+
+    subgraph CRM["⚙️ CRM Backend - TanStack Server Functions"]
+        DASH[getDashboardStats]
+        SEG[segmentFromNaturalLanguage]
+        GEN[generateCampaign]
+        SEND[sendCampaign]
+        ANA[getCampaignAnalytics]
+        AST[assistantChat]
+    end
+
+    subgraph SIM["📡 Channel Simulator - independent service surface"]
+        RUN["POST /api/public/simulator/run"]
+        SND["POST /api/public/simulator/send"]
+        CB["POST /api/public/callback"]
+    end
+
+    subgraph AI["🤖 Lovable AI Gateway"]
+        GEMINI[google/gemini-3-flash-preview<br/>structured JSON output]
+    end
+
+    subgraph DB["🗄️ Postgres - Lovable Cloud"]
+        C[(customers - 1000)]
+        O[(orders - 5000)]
+        CP[(campaigns)]
+        CM[(communications)]
+    end
+
+    UI --> DASH & SEG & GEN & ANA
+    Bot --> AST
+    UI -->|click Send| SEND
+
+    SEG -.JSON filter.-> GEMINI
+    GEN -.draft.-> GEMINI
+    AST -.chat.-> GEMINI
+    DASH -.insights.-> GEMINI
+    ANA -.insights.-> GEMINI
+
+    SEND -->|insert pending comms| CM
+    SEND -->|HTTP POST run| RUN
+    RUN -->|read pending| CM
+    RUN -->|HTTP POST callback per row| CB
+    CB -->|update status/timestamps| CM
+
+    DASH --> C & O & CP
+    SEG --> C & O
+    ANA --> CM & CP

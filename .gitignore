@@ -1,0 +1,40 @@
+# Dependency directories
+**/node_modules/
+
+# Next.js build output
+**/out/
+**/.next/
+
+# TypeScript/Express build output
+**/dist/
+**/build/
+
+# Environment variables (Secrets)
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# Keep env examples
+!**/.env.example
+
+# Debug and system logs
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
