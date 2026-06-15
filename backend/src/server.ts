@@ -243,9 +243,16 @@ async function start() {
   });
 }
 
-start().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+if (!process.env.VERCEL) {
+  start().catch((err) => {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  });
+} else {
+  // In Vercel serverless environment, connect to the database
+  connectDB().catch((err) => {
+    console.error('Failed to connect to DB in serverless mode:', err);
+  });
+}
 
 export default app;
